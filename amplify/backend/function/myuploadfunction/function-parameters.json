@@ -1,0 +1,9 @@
+{
+  "lambdaLayers": [],
+  "environmentVariableList": [
+    {
+      "cloudFormationParameterName": "cloudinaryApiSecret",
+      "environmentVariableName": "CLOUDINARY_API_SECRET"
+    }
+  ]
+}
