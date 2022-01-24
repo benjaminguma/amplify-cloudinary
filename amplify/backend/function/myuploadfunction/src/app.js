@@ -15,16 +15,20 @@ Amplify Params - DO NOT EDIT */
 var express = require('express');
 var bodyParser = require('body-parser');
 var awsServerlessExpressMiddleware = require('aws-serverless-express/middleware');
+
 var cors = require('cors');
+const multer = require('multer');
 
 // declare a new express app
 var app = express();
 app.use(bodyParser.json());
+app.use(cors());
 app.use(awsServerlessExpressMiddleware.eventContext());
 
-app.use(cors());
-
 const Cloudinary = require('cloudinary').v2;
+
+const storage = multer.memoryStorage();
+const upload = multer({ storage });
 
 const cldConfig = {
 	cloud_name: 'dqydioa16',
@@ -33,13 +37,20 @@ const cldConfig = {
 };
 
 Cloudinary.config(cldConfig);
-app.post('/upload', async (req, res, next) => {
+
+app.post('/upload', upload.single('file'), async (req, res, next) => {
+	let file, b64Img;
 	try {
-		const cldRes = await Cloudinary.uploader.upload(req.body.file, { resource_type: 'auto' });
-		console.log({ cldRes });
-		return res.send(cldRes);
+		file = req.file;
+		console.log({ file });
+		b64Img = `data:${file.mimetype};base64,` + Buffer.from(file.buffer).toString('base64');
+
+		const cldRes = await Cloudinary.uploader.upload(b64Img, {
+			resource_type: 'auto',
+		});
+		return res.json({ ...cldRes });
 	} catch (error) {
-		return res.send(error);
+		return res.json({ error: error.message });
 	}
 });
 

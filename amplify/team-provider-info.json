@@ -15,7 +15,7 @@
       "function": {
         "myuploadfunction": {
           "deploymentBucketName": "amplify-amplifyproject1234-dev-162531-deployment",
-          "s3Key": "amplify-builds/myuploadfunction-6a394c2b654768354954-build.zip",
+          "s3Key": "amplify-builds/myuploadfunction-414e3555592b43664777-build.zip",
           "cloudinaryApiSecret": "3X9MYAFrd2Jm3L2rnj3RqCoSTEk"
         }
       }

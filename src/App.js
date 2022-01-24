@@ -21,12 +21,19 @@ function App() {
 	const handleUpload = async () => {
 		try {
 			setLoading(true);
-			const b64 = await fileToDataURL(file);
+			// const b64 = await fileToDataURL(file);
+			const data = new FormData();
+
+			data.append('file', file);
+
+			// const init = {
+			// 	body: {
+			// 		file: b64,
+			// 	},
+			// };
 
 			const init = {
-				body: {
-					file: b64,
-				},
+				body: data,
 			};
 			const res = await API.post('myapigateway', '/upload', init);
 			setRes(res);
@@ -52,18 +59,19 @@ function App() {
 						<center> {file.name}</center>
 					</div>
 				)}
-				<input
-					id='file'
-					type='file'
-					onChange={handleSelectFile}
-					multiple={false}
-					accept='image/*,video/*'
-				/>
+				<form onSubmit={handleUpload} encType='multipart/formdata'>
+					<input
+						id='file'
+						type='file'
+						onChange={handleSelectFile}
+						multiple={false}
+						accept='image/*,video/*'
+						name='file'
+					/>
+				</form>
 				{file && (
 					<>
-						<button onClick={handleUpload} className='btn-green'>
-							{loading ? 'uploading...' : 'upload'}
-						</button>
+						<button className='btn-green'>{loading ? 'uploading...' : 'upload'}</button>
 					</>
 				)}
 			</div>
